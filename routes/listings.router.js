@@ -9,11 +9,15 @@ const Review = require("../models/review.js");
 const listingController = require("../controllers/listings.controller.js");
 const { isLoggedIn, isOwner } = require("../middleware.js");
 const listingsRouter = express.Router();
+const multer = require("multer");
+const {storage} = require("../cloudConfig.js")
+const upload = multer({storage})
+
 
 listingsRouter
   .route("/")
   .get(wrapAsync(listingController.index))
-  .post(validateListing, wrapAsync(listingController.createListing));
+  .post(isLoggedIn,upload.single("listing[image]"),validateListing,wrapAsync(listingController.createListing));
 
 listingsRouter.get("/new", isLoggedIn, listingController.renderNewForm);
 

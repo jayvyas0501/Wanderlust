@@ -1,7 +1,10 @@
+if(process.env.NODE_ENV !== 'production'){
+    require('dotenv').config();
+}
+
 const express = require("express");
 const path = require("node:path");
 const mongoose = require("mongoose");
-const dotenv = require('dotenv');
 const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
 const ExpressError = require("./utils/ExpressError.js");
@@ -19,7 +22,7 @@ const listingsRouter = require("./routes/listings.router.js");
 const reviewRouter = require("./routes/review.router.js");
 const userRouter = require("./routes/user.router.js");
 
-dotenv.config();
+
 
 const app = express();
 
