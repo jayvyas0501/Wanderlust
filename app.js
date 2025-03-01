@@ -8,16 +8,15 @@ const mongoose = require("mongoose");
 const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
 const ExpressError = require("./utils/ExpressError.js");
-const session = require("express-session"); 
+const session = require("express-session");
+const MongoStore = require('connect-mongo'); 
 const flash = require("connect-flash");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const User = require("./models/user.js");
-const { log } = require("node:console");
-
 
 //!-------------Routes----------------
-const homeRouter = require("./routes/home.router.js");
+
 const listingsRouter = require("./routes/listings.router.js");
 const reviewRouter = require("./routes/review.router.js");
 const userRouter = require("./routes/user.router.js");
@@ -29,6 +28,7 @@ const app = express();
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "./views"));
 app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 app.use(methodOverride("_method"));
 app.engine("ejs",ejsMate);
 app.use(express.static(path.join(__dirname,"public")));
@@ -45,7 +45,16 @@ async function main() {
     await mongoose.connect(process.env.MONGO_URL);
 }
 
+const store = MongoStore.create({
+    mongoUrl: process.env.MONGO_URL,
+    crypto:{
+        secret: "secret"
+    },
+    touchAftre:24*3600
+});
+
 const sessionOptions = {
+    store,
     secret: "secret",
     resave: false,
     saveUninitialized: true,
@@ -55,8 +64,10 @@ const sessionOptions = {
         httpOnly:true,
      }
 }
-app.use("/",homeRouter);                //? Home routes
 
+store.on("error",(err)=>{
+    console.log("error in mongo_store", err)
+})
 
 //!----------------------passport set-up-------------------
 app.use(session(sessionOptions));

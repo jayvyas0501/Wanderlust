@@ -20,16 +20,26 @@ module.exports.saveRedirectUrl = (req,res,next)=>{
   next()
 }
 
-module.exports.isOwner = async(req,res,next)=>{
+module.exports.isOwner = async (req, res, next) => {
   const { id } = req.params;
-    const listing = await Listing.findById(id);
-    // Authorization check
-    if (!listing.owner.equals(res.locals._id)) {
-      req.flash("error", "You are not authorized to Do that!");
-      return res.redirect(`/listings/${id}`);
-    }
-    next()
-}
+  const listing = await Listing.findById(id);
+
+  if (!listing) {
+    req.flash("error", "Listing not found!");
+    return res.redirect("/listings");
+  }
+
+  // console.log("Authenticated User:", req.user); // Debugging
+  // console.log("Listing Owner:", listing.owner._id);  
+
+  if (!req.user || !listing.owner._id.equals(req.user._id)) {
+    req.flash("error", "You are not authorized to do that!");
+    return res.redirect(`/listings/${id}`);
+  }
+
+  next();
+};
+
 
 module.exports.validateListing = (req, res, next) => {
   const { error } = listingSchema.validate(req.body);

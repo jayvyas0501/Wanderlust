@@ -23,18 +23,8 @@
             name="listing[description]"
             class="form-control"
             required
-          >
-          </textarea>
+          ></textarea>
           <div class="invalid-feedback">please enter desciption</div>
-        </div>
-        <div class="mb-3">
-          <lable for="image" class="form-lable">Image URL</lable>
-          <input
-            type="text"
-            placeholder="Enter image URL/Link"
-            name="listing[image]"
-            class="form-control"
-          />
         </div>
         <div class="mb-3">
           <lable for="image" class="form-lable">Upload Image</lable>
@@ -42,6 +32,7 @@
             type="file"
             name="listing[image]"
             class="form-control"
+            required
           />
         </div>
         <div class="row">
@@ -50,7 +41,7 @@
           <input
             
             placeholder="1200"
-            name="listing[price] "
+            name="listing[price]"
             class="form-control"
             required
           />
