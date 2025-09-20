@@ -1,41 +1,129 @@
 <% layout("/layouts/boilerplate.ejs") %>
 
-<div class="row mt-3">
-  <h1 class="col-6 offset-3">Signup</h1>
-  <div class="col-6 offset-3">
-    <form action="/signup" method="post" class="needs-validation" novalidate>
-      <div class="mb-3">
-        <lable for="title" class="form-lable">Username</lable>
-        <input
-          type="text"
-          id="username"
-          name="username"
-          class="form-control"
-          required
-        />
-        <div class="valid-feedback">look's good!</div>
+<style>
+  body {
+    background-color: #f8f9fa; /* light background like navbar/footer */
+  }
+
+  .signup-container {
+    max-width: 400px;
+    margin: 5rem auto;
+    padding: 2rem;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+  }
+
+  .signup-container h1 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    color: #333;
+  }
+
+  .form-label {
+    font-weight: 500;
+    color: #333;
+  }
+
+  .form-control {
+    border-radius: 8px;
+    padding: 0.5rem 1rem;
+    border: 1px solid #ccc;
+    transition: all 0.2s;
+  }
+
+  .form-control:focus {
+    outline: none;
+    border-color: #fe424d;
+    box-shadow: 0 0 5px rgba(254,66,77,0.3);
+  }
+
+  .btn-signup {
+    width: 100%;
+    padding: 0.5rem;
+    border-radius: 25px;
+    background-color: #fe424d;
+    color: #fff;
+    font-weight: 500;
+    transition: all 0.2s;
+  }
+
+  .btn-signup:hover {
+    background-color: #e63946;
+  }
+
+  @media (max-width: 576px) {
+    .signup-container {
+      margin: 3rem 1rem;
+      padding: 1.5rem;
+    }
+  }
+</style>
+
+<div class="signup-container">
+  <h1>Sign Up</h1>
+  <form action="/signup" method="post" class="needs-validation" novalidate>
+    <div class="mb-3">
+      <label for="username" class="form-label">Username</label>
+      <input
+        type="text"
+        id="username"
+        name="username"
+        class="form-control"
+        placeholder="Enter your username"
+        required
+      />
+      <div class="invalid-feedback">
+        Please enter your username
       </div>
-      <div class="mb-3">
-        <lable for="title" class="form-lable">Email</lable>
-        <input
-          type="email"
-          id="email"
-          name="email"
-          class="form-control"
-          required
-        />
+    </div>
+
+    <div class="mb-3">
+      <label for="email" class="form-label">Email</label>
+      <input
+        type="email"
+        id="email"
+        name="email"
+        class="form-control"
+        placeholder="Enter your email"
+        required
+      />
+      <div class="invalid-feedback">
+        Please enter a valid email
       </div>
-      <div class="mb-3">
-        <lable for="title" class="form-lable">Password</lable>
-        <input
-          type="password"
-          id="password"
-          name="password"
-          class="form-control"
-          required
-        />
+    </div>
+
+    <div class="mb-3">
+      <label for="password" class="form-label">Password</label>
+      <input
+        type="password"
+        id="password"
+        name="password"
+        class="form-control"
+        placeholder="Enter your password"
+        required
+      />
+      <div class="invalid-feedback">
+        Please enter your password
       </div>
-      <button class="btn btn-success">SignUp</button>
-    </form>
-  </div>
+    </div>
+
+    <button type="submit" class="btn btn-signup">Sign Up</button>
+  </form>
 </div>
+
+<script>
+  (() => {
+    'use strict'
+    const forms = document.querySelectorAll('.needs-validation')
+    Array.from(forms).forEach(form => {
+      form.addEventListener('submit', event => {
+        if (!form.checkValidity()) {
+          event.preventDefault()
+          event.stopPropagation()
+        }
+        form.classList.add('was-validated')
+      }, false)
+    })
+  })();
+</script>

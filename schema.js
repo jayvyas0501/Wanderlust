@@ -1,15 +1,17 @@
 const joi = require("joi");
 module.exports.listingSchema = joi.object({
-    listing : joi.object({
-        title : joi.string().required(),
-        description : joi.string().required(),
-        price : joi.number().required().min(0),
-        location: joi.string().required(),
-        country : joi.string().required(),
-        image: joi.string().allow("",null),
-    }).required(),
+    title: joi.string().trim().max(100).required().messages({
+        "string.empty": "Title cannot be empty",
+        "any.required": "Title is required"
+    }),
+    description: joi.string().trim().max(1000).required(),
+    price: joi.number().min(0).required(),
+    location: joi.string().trim().max(100).required(),
+    country: joi.string().trim().max(100).required(),
+    image: joi.string().optional()
+}).required()
 
-})
+
 
 module.exports.reviewSchema = joi.object({
     review : joi.object({

@@ -1,14 +1,109 @@
+<style>
+  /* Compact Footer Styles */
+  footer {
+    background-color: #f8f9fa; /* light background */
+    color: #333;
+    padding: 2rem 1rem;
+    font-size: 0.9rem;
+    border-top: 1px solid #ddd;
+  }
+
+  footer a {
+    color: #333;
+    text-decoration: none;
+  }
+
+  footer a:hover {
+    color: #fe424d;
+    text-decoration: underline;
+  }
+
+  .footer-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 1.5rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .footer-col h5 {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+
+  .footer-col ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .footer-col ul li {
+    margin-bottom: 0.3rem;
+  }
+
+  .footer-bottom {
+    text-align: center;
+    margin-top: 1.5rem;
+    color: #666;
+  }
+
+  @media (max-width: 768px) {
+    .footer-container {
+      flex-direction: column;
+      text-align: center;
+      gap: 1rem;
+    }
+  }
+</style>
+
 <footer>
-    <div class="f-info">
-        <div class="f-info-socials">
-            <i class="fa-brands fa-square-facebook"></i>
-            <i class="fa-brands fa-square-instagram"></i>
-            <i class="fa-brands fa-linkedin"></i>
-        </div>
-        <div class="f-info-brand">Wanderlust private limited</div>
-        <div class="f-info-links">
-            <a href="/privacy">privacy</a>
-            <a href="/terms">Terms</a>
-        </div>
+  <div class="container footer-container">
+    <!-- About -->
+    <div class="footer-col">
+      <h5>About Wanderlust</h5>
+      <p>Book unique stays worldwide and share your home with travelers.</p>
     </div>
+
+    <!-- Quick Links (Internal - same tab) -->
+    <div class="footer-col">
+      <h5>Quick Links</h5>
+      <ul>
+        <li><a href="/listings">Explore Destinations</a></li>
+        <li><a href="/listings/new">List Your Property</a></li>
+        <li><a href="/signup">Sign Up</a></li>
+        <li><a href="/login">Log In</a></li>
+      </ul>
+    </div>
+
+    <!-- Resources (External - new tab) -->
+    <div class="footer-col">
+      <h5>Resources</h5>
+      <ul>
+        <li><a href="https://www.airbnb.com/help" target="_blank">Help Center</a></li>
+        <li><a href="https://www.airbnb.com/terms" target="_blank">Terms & Conditions</a></li>
+        <li><a href="https://www.airbnb.com/privacy" target="_blank">Privacy Policy</a></li>
+        <li><a href="https://www.airbnb.com/safety" target="_blank">Safety Tips</a></li>
+      </ul>
+    </div>
+
+    <!-- Contact -->
+    <div class="footer-col">
+      <h5>Contact</h5>
+      <ul>
+        <li>Email: <a href="mailto:info@wanderlust.com">info@wanderlust.com</a></li>
+        <li>Phone: <a href="tel:+919267892749">+91 12345 67890</a></li>
+        <li>
+          Follow us: 
+          <a href="https://facebook.com" target="_blank"><i class="fab fa-facebook-f"></i></a>
+          <a href="https://twitter.com" target="_blank"><i class="fab fa-twitter"></i></a>
+          <a href="https://instagram.com" target="_blank"><i class="fab fa-instagram"></i></a>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    &copy; <%= new Date().getFullYear() %> Wanderlust. All rights reserved.
+  </div>
 </footer>

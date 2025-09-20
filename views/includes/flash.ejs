@@ -1,13 +1,38 @@
+<div class="flash-messages mt-3">
+  <% if(success && success.length){ %>
+    <div class="alert alert-success alert-dismissible fade show d-flex align-items-center" role="alert">
+      <i class="fa-solid fa-circle-check me-2"></i>
+      <span><%= success %></span>
+      <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+  <% } %>
+  <% if(error && error.length){ %>
+    <div class="alert alert-danger alert-dismissible fade show d-flex align-items-center" role="alert">
+      <i class="fa-solid fa-circle-exclamation me-2"></i>
+      <span><%= error %></span>
+      <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+  <% } %>
+</div>
 
-<%if(success && success.length){%>
-<div class="alert alert-success alert-dismissible fade show" role="alert">
-    <%=success%>
-    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-</div>
-<% } %>
-<%if(error && error.length){%>
-<div class="alert alert-danger alert-dismissible fade show" role="alert">
-    <%=error%>
-    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-</div>
-<% } %>
+<style>
+  /* Optional: make fade slower and smoother */
+  .alert {
+    transition: opacity 0.6s ease, transform 0.4s ease;
+  }
+</style>
+
+<script>
+  // Auto-remove flash messages after 5 seconds with smooth fade
+  setTimeout(() => {
+    const alerts = document.querySelectorAll('.alert');
+    alerts.forEach(alert => {
+      alert.style.opacity = '0';
+      alert.style.transform = 'translateY(-20px)';
+      setTimeout(() => {
+        const bsAlert = new bootstrap.Alert(alert);
+        bsAlert.close(); // removes from DOM
+      }, 600); // match CSS transition duration
+    });
+  }, 5000);
+</script>

@@ -1,84 +1,121 @@
 <% layout("/layouts/boilerplate.ejs") %>
+
 <div class="row">
   <div class="col-8 offset-2">
     <br /><br />
-    <h1>Edit your list</h1>
-    <form action="/listings/<%= listing._id%>?_method=PUT" method="post" novalidate class="needs-validation" enctype="multipart/form-data">
+    <h1>Edit your listing</h1>
+    <form action="/listings/<%= listing._id %>?_method=PUT" method="post" novalidate class="needs-validation" enctype="multipart/form-data">
+
+      <!-- Title -->
       <div class="mb-3">
         <label for="title" class="form-label">Title</label>
+        <input type="text" placeholder="Enter Title" name="listing[title]" class="form-control" value="<%= listing.title %>" required />
+        <div class="valid-feedback">Looks good!</div>
+      </div>
 
-        <input
-          type="text" 
-          placeholder="Enter Title"
-          name="listing[title]"
-          class="form-control"
-          value="<%= listing.title %>"
-          required
-        />
-        <div class="valid-feedback">look's good!</div>
-      </div>
+      <!-- Description -->
       <div class="mb-3">
-        <lable for="description" class="form-lable">Description</lable>
-        <input
-          type="text"
-          value="<%= listing.description %>"
-          class="form-control"
-          name="listing[description]"
-          required
-        />
-        <div class="invalid-feedback">Enter valid desciption!</div>
+        <label for="description" class="form-label">Description</label>
+        <textarea name="listing[description]" class="form-control" rows="3" required><%= listing.description %></textarea>
+        <div class="invalid-feedback">Enter a valid description!</div>
       </div>
+
+      <!-- Original Image -->
       <div class="mb-3">
-        Originam Listing Image </br>
-        <img src="<%= originalImageUrl %>"/>
+        <label>Original Listing Image</label><br/>
+        <% if (listing.image.url) { %>
+          <img src="<%= listing.image.url %>" alt="Listing Image" class="img-thumbnail" style="max-width:200px;">
+        <% } else { %>
+          <p>No image uploaded</p>
+        <% } %>
       </div>
+
+      <!-- Upload New Image -->
       <div class="mb-3">
-        <lable for="image" class="form-lable">Upload New Image</lable>
-        <input
-          type="file"
-          name="listing[image]"
-          class="form-control"
-        
-        />
-        
+        <label for="image" class="form-label">Upload New Image</label>
+        <input type="file" name="listing[image]" class="form-control" />
       </div>
+
+      <!-- Price, Country, Location -->
       <div class="row">
         <div class="mb-3 col-md-4">
-          <lable for="title" class="form-lable">Price</lable>
-          <input
-            type="number"
-            value="<%= listing.price %>"
-            name="listing[price]"
-            class="form-control"
-            required
-          />
-          <div class="invalid-feedback">Enter valid Price!</div>
+          <label for="price" class="form-label">Price</label>
+          <input type="number" value="<%= listing.price %>" name="listing[price]" class="form-control" required />
+          <div class="invalid-feedback">Enter a valid price!</div>
         </div>
-        <div class="mb-3 col-md-8">
-          <lable for="title" class="form-lable">Country</lable>
-          <input
-            type="text"
-            value="<%= listing.country %>"
-            name="listing[country]"
-            class="form-control"
-            required
-          />
-          <div class="invalid-feedback">Enter valid Country name!</div>
+        <div class="mb-3 col-md-4">
+          <label for="country" class="form-label">Country</label>
+          <input type="text" value="<%= listing.country %>" name="listing[country]" class="form-control" required />
+          <div class="invalid-feedback">Enter a valid country!</div>
+        </div>
+        <div class="mb-3 col-md-4">
+          <label for="location" class="form-label">Location</label>
+          <input type="text" value="<%= listing.location %>" name="listing[location]" class="form-control" required />
+          <div class="invalid-feedback">Enter a valid location!</div>
         </div>
       </div>
+
+      <!-- Category -->
       <div class="mb-3">
-        <lable for="title" class="form-lable">Location</lable>
-        <input
-          type="text"
-          value="<%= listing.location %>"
-          name="listing[location]"
-          class="form-control"
-          required
-        />
-        <div class="invalid-feedback">Enter valid Location!</div>
+        <label for="category" class="form-label">Category</label>
+        <select name="listing[category]" class="form-select" required>
+          <% const categories = ["Trending","Rooms","Iconic Cities","Mountains","Castles","Pools","Camping","Farms","Arctic","Domes","Boats"]; %>
+          <% categories.forEach(cat => { %>
+            <option value="<%= cat %>" <%= listing.category === cat ? "selected" : "" %>><%= cat %></option>
+          <% }) %>
+        </select>
       </div>
-      <button class="btn btn-dark edit-btn">Edit List</button>
-        <br /><br />
+
+      <!-- Tags -->
+      <div class="mb-3">
+        <label for="tags" class="form-label">Tags</label>
+        <div id="tags-container">
+          <% if (listing.tags && listing.tags.length > 0) { %>
+            <% listing.tags.forEach((tag, idx) => { %>
+              <span class="badge bg-secondary me-1 mb-1 tag-item">
+                <%= tag %> 
+                <button type="button" class="btn-close btn-close-white btn-sm remove-tag" aria-label="Remove"></button>
+                <input type="hidden" name="listing[tags][]" value="<%= tag %>">
+              </span>
+            <% }) %>
+          <% } %>
+        </div>
+        <input type="text" id="new-tag-input" placeholder="Add a tag and press Enter" class="form-control mt-2">
+      </div>
+
+      <button class="btn btn-dark edit-btn">Update Listing</button>
+      <br /><br />
     </form>
   </div>
 </div>
+
+<script>
+  // Tag addition/removal
+  const newTagInput = document.getElementById("new-tag-input");
+  const tagsContainer = document.getElementById("tags-container");
+
+  newTagInput.addEventListener("keydown", function(e) {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      const tag = newTagInput.value.trim();
+      if (tag) {
+        const span = document.createElement("span");
+        span.className = "badge bg-secondary me-1 mb-1 tag-item";
+        span.innerHTML = `${tag} <button type="button" class="btn-close btn-close-white btn-sm remove-tag" aria-label="Remove"></button>`;
+        const hiddenInput = document.createElement("input");
+        hiddenInput.type = "hidden";
+        hiddenInput.name = "listing[tags][]";
+        hiddenInput.value = tag;
+        span.appendChild(hiddenInput);
+        tagsContainer.appendChild(span);
+        newTagInput.value = "";
+      }
+    }
+  });
+
+  tagsContainer.addEventListener("click", function(e) {
+    if (e.target.classList.contains("remove-tag")) {
+      e.target.parentElement.remove();
+    }
+  });
+</script>
